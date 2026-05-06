@@ -27,35 +27,38 @@
     <div class="home-cards stagger-children">
       <router-link to="/daily" class="home-card home-card--daily">
         <div class="card-icon">📅</div>
-        <h2>每日挑战</h2>
-        <p>完成今日图案获取奖励</p>
+        <div class="card-content">
+          <h2>每日挑战</h2>
+          <p>完成今日图案获取奖励</p>
+        </div>
         <span v-if="dailyStore.isTodayCompleted" class="card-tag tag--done">✓ 已完成</span>
         <span v-else class="card-tag tag--time">{{ timeRemaining }}</span>
       </router-link>
 
       <router-link to="/level" class="home-card home-card--level">
         <div class="card-icon">🎮</div>
-        <h2>关卡挑战</h2>
-        <p>循序渐进解锁新关卡</p>
-        <div class="card-progress-bar">
-          <div class="card-progress-fill" :style="{ width: progressPercent + '%' }"></div>
+        <div class="card-content">
+          <h2>关卡挑战</h2>
+          <p>循序渐进解锁新关卡</p>
         </div>
-        <span class="card-tag tag--info">进度 {{ userStore.currentLevel }}/{{ totalLevels }}</span>
+        <div class="card-tag tag--info">进度 {{ userStore.currentLevel }}/{{ totalLevels }}</div>
       </router-link>
 
       <router-link to="/free" class="home-card home-card--free">
         <div class="card-icon">🎨</div>
-        <h2>自由创作</h2>
-        <p>无限制挥洒创意</p>
+        <div class="card-content">
+          <h2>自由创作</h2>
+          <p>无限制挥洒创意</p>
+        </div>
         <span class="card-tag tag--info">作品 {{ freeWorksCount }}</span>
       </router-link>
 
-      <router-link to="/leaderboard" class="home-card home-card--rank">
-        <div class="card-icon">🏆</div>
-        <h2>排行榜</h2>
-        <p>看看大家的作品排名</p>
-        <span class="card-tag tag--rank">#{{ userRank }}</span>
-      </router-link>
+      <!-- Deleted:<router-link to="/leaderboard" class="home-card home-card--rank"> -->
+      <!-- Deleted:<div class="card-icon">🏆</div> -->
+      <!-- Deleted:<h2>排行榜</h2> -->
+      <!-- Deleted:<p>看看大家的作品排名</p> -->
+      <!-- Deleted:<span class="card-tag tag--rank">#{{ userRank }}</span> -->
+      <!-- Deleted:</router-link> -->
     </div>
   </div>
 </template>
@@ -73,7 +76,6 @@ const { theme, toggle: toggleTheme } = useTheme()
 
 const timeRemaining = ref('')
 const freeWorksCount = ref(0)
-const userRank = ref(999)
 const totalLevels = getTotalLevels()
 
 let timer: number | null = null
@@ -196,7 +198,7 @@ onUnmounted(() => {
 /* Cards */
 .home-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
   width: 100%;
   max-width: 1100px;
@@ -232,7 +234,6 @@ onUnmounted(() => {
 .home-card--daily::before { background: #f59e0b; }
 .home-card--level::before { background: #3b82f6; }
 .home-card--free::before { background: #ec4899; }
-.home-card--rank::before { background: #8b5cf6; }
 
 .home-card:hover {
   transform: translateY(-6px);
@@ -266,7 +267,6 @@ onUnmounted(() => {
 .tag--done { background: #d1fae5; color: #065f46; }
 .tag--time { background: #fef3c7; color: #92400e; font-family: var(--font-mono); font-size: 0.7rem; }
 .tag--info { background: #e0e7ff; color: #3730a3; }
-.tag--rank { background: #ede9fe; color: #5b21b6; }
 
 .card-progress-bar {
   width: 100%;
@@ -287,30 +287,114 @@ onUnmounted(() => {
 /* Responsive */
 @media (max-width: 1024px) {
   .home-cards {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 640px) {
   .home {
-    padding: 1.25rem 1rem 2rem;
+    padding: 1.5rem 1rem 2rem;
   }
-  .home-logo { font-size: 1.6rem; }
+  .home-logo {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  .home-tagline {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .home-stats {
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+  }
+  .stat-badge {
+    padding: 0.5rem 0.75rem;
+    min-width: 64px;
+  }
+  .stat-label {
+    font-size: 0.65rem;
+  }
+  .stat-num {
+    font-size: 1.2rem;
+  }
   .home-cards {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
   }
   .home-card {
-    padding: 1.25rem 0.75rem;
+    padding: 1rem;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 0.875rem;
   }
-  .home-card h2 { font-size: 0.95rem; }
-  .card-icon { font-size: 2rem; }
-  .home-stats { gap: 0.75rem; }
+  .card-icon {
+    font-size: 2.25rem;
+    flex-shrink: 0;
+    width: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .home-card h2 {
+    font-size: 1.05rem;
+    margin: 0 0 0.25rem 0;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .home-card p {
+    font-size: 0.8rem;
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+  }
+  .card-progress-bar {
+    display: none;
+  }
+  .card-tag {
+    margin: 0;
+    margin-left: auto;
+    flex-shrink: 0;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  .home-card--daily .card-tag {
+    min-width: 6.5rem;
+    text-align: center;
+    font-family: var(--font-mono);
+  }
 }
 
 @media (max-width: 380px) {
+  .home {
+    padding: 1.25rem 0.75rem 2rem;
+  }
+  .home-logo {
+    font-size: 1.6rem;
+  }
+  .home-tagline {
+    font-size: 0.85rem;
+  }
   .home-cards {
-    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .home-card {
+    padding: 0.875rem 0.75rem;
+    gap: 0.75rem;
+  }
+  .card-icon {
+    font-size: 2rem;
+    width: 2.5rem;
+  }
+  .home-card h2 {
+    font-size: 1rem;
+  }
+  .home-card p {
+    font-size: 0.75rem;
+  }
+  .card-tag {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.625rem;
   }
 }
 </style>

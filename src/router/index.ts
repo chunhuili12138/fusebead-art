@@ -27,12 +27,6 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '自由创作' },
   },
   {
-    path: '/leaderboard',
-    name: 'Leaderboard',
-    component: () => import('@/views/Leaderboard.vue'),
-    meta: { title: '排行榜' },
-  },
-  {
     path: '/game',
     name: 'GameBoard',
     component: () => import('@/views/GameBoard.vue'),
